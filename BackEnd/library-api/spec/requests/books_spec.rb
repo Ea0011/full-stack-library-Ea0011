@@ -58,7 +58,13 @@ RSpec.describe 'Books API', type: :request do
     end
 
     describe 'POST /books' do
-        let!(:valid_data) { { name: 'The Da Vinci Code', pages: 500, genre: "Detective" } }
+        let!(:valid_data) { 
+            { name: 'The Da Vinci Code', 
+                pages: 500, 
+                genre: "Detective",
+                written_by: 'Dan Brown'
+            } 
+        }
 
         context 'valid data passed' do
             # make api call before runing unit tests

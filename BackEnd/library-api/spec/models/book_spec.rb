@@ -4,4 +4,5 @@ RSpec.describe Book, type: :model do
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:genre) }
   it { should validate_presence_of(:pages) }
+  it { should validate_presence_of(:written_by) }
 end

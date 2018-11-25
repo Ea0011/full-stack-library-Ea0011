@@ -5,5 +5,6 @@ FactoryBot.define do
         genre { Faker::Lorem.word }
         description { Faker::Lorem.paragraph(2) }
         rating { Faker::Number.number(2) }
+        written_by { Faker::Lorem.word }
     end
 end
