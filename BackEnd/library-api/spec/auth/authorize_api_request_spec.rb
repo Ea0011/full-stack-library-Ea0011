@@ -10,7 +10,7 @@ RSpec.describe AuthorizeApiRequest do
 
     describe '#call' do
         context 'valid request' do
-            it 'should return token' do
+            it 'should return the author' do
                 result = valid_request.call
                 expect(result[:author]).to eq(author)
             end

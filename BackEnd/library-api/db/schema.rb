@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_25_160532) do
+ActiveRecord::Schema.define(version: 2018_11_26_150024) do
 
   create_table "authors", force: :cascade do |t|
     t.string "fname"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2018_11_25_160532) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_authors_on_email", unique: true
   end
 
   create_table "books", force: :cascade do |t|
@@ -27,9 +28,9 @@ ActiveRecord::Schema.define(version: 2018_11_25_160532) do
     t.string "genre"
     t.integer "rating"
     t.text "description"
+    t.string "written_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "written_by"
   end
 
 end

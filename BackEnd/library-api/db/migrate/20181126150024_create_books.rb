@@ -6,6 +6,7 @@ class CreateBooks < ActiveRecord::Migration[5.2]
       t.string :genre
       t.integer :rating
       t.text :description
+      t.string :written_by
 
       t.timestamps
     end

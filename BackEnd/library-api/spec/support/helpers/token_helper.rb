@@ -13,7 +13,7 @@ module TokenHelper
             "Content-Type" => "application/json"
         }
     end
-
+    
     def invalid_headers
         {
             "Authorization" => nil,
