@@ -12,7 +12,8 @@ class AuthorizeApiRequest
     private
 
     def author
-        @author = Author.find(decoded_token[:author_id]) if decoded_token
+        @author = Author.where(authentication_token: auth_header).first
+        # @author = Author.find(decoded_token[:author_id]) if decoded_token
 
         rescue ActiveRecord::RecordNotFound => e
             raise(ExceptionHandler::InvalidToken, "Invalid Token")

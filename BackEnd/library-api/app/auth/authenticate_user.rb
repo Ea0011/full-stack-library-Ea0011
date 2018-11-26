@@ -7,15 +7,15 @@ class AuthenticateUser
 
     def call
         current_author = author
+        token = JsonWebToken.encode({ author_id: current_author&.id })
+        current_author.update(authentication_token: token)
         {
-            token: JsonWebToken.encode({ author_id: current_author&.id }),
-            fname: current_author.fname,
-            lname: current_author.lname
+            author: current_author
         }
     end
 
     def author
-        author = Author.find_by(email: @email)
+        author = Author.where(email: @email).first
         return author if author && author.authenticate(@password)
 
         raise(ExceptionHandler::AuthenticationError, "Invalid Credentials")

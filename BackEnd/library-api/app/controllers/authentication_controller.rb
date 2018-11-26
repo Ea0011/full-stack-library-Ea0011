@@ -6,6 +6,11 @@ class AuthenticationController < ApplicationController
         json_response(authent_author)
     end
 
+    def logout
+        current_author.update(authentication_token: nil)
+        head(:no_content)
+    end
+
     private
 
     def auth_params

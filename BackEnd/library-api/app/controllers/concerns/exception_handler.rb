@@ -13,7 +13,7 @@ module ExceptionHandler
         end
 
         rescue_from ActiveRecord::RecordNotUnique do |e|
-            json_response({ message: "Username already exists" }, :conflict)
+            json_response({ message: "Object already exists" }, :conflict)
         end
 
         rescue_from ActiveRecord::RecordInvalid, with: :four_two_two
