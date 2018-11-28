@@ -18,19 +18,28 @@ class AuthorsController < ApplicationController
     end
 
     def update
-        @current_author.update(author_params)
+        current_author.update(author_params)
         json_response(@current_author)
     end
 
     def destroy
-        @current_author.destroy
+        current_author.destroy
         head(:no_content)
+    end
+
+    def current_books
+        books = current_author&.books&.all
+        if books
+            json_response(books)
+        else   
+            raise(ExceptionHandler::AuthenticationError, "Unathorized")
+        end
     end
     
     private
 
     def set_author
-        @author = Author.find(author_params[:id])
+        @author = Author.find(params[:id])
     end 
 
     def author_params

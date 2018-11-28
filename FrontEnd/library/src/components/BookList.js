@@ -19,11 +19,11 @@ class BookList extends React.PureComponent {
         return (
             <DataContext.Consumer>
                 {context => (
-                    <Grid container spacing={24} style={{padding: 8}}>
+                    <Grid container spacing={16} style={{padding: 8}}>
                         {context.books.length ? 
                             context.books.map(book => (
                                 <Grid item xs={12} sm={6} lg={4} xl={2} key={book.id}>
-                                    <Book book={book} />
+                                    <Book book={book} loggedIn={false} />
                                 </Grid>
                             )) : 
                             "No Books Yet :("

@@ -17,7 +17,7 @@ class AuthorList extends React.PureComponent {
         return(
             <DataContext.Consumer>
                 {context => (
-                    <Grid container spacing={16} style={{padding: 8}}>
+                    <Grid container spacing={16} style={{padding: 8, marginTop: 35}}>
                         {context.authors.length ?
                             context.authors.map(author => (
                                 <Grid item xs={12} sm={6} lg={4} xl={2} key={author.id}>

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
 import { DataContext } from '../context/Data';
 
-const Book = ({ book }) => (
+const Book = ({ book, loggedIn, handleDelete }) => (
     <DataContext.Consumer>
         {context => (
             <Card>
@@ -26,11 +26,19 @@ const Book = ({ book }) => (
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Link to="/author" style={{ textDecoration: 'none' }}>
-                        <Button size="small" color={context.currentTheme.colorPrimary}>
-                            About the Author
-                        </Button>
-                    </Link>
+                    {
+                        loggedIn ? 
+                            <Button size="small"
+                                color={context.currentTheme.colorSecondary}
+                                onClick={() => {handleDelete(book.id)}}>
+                                Delete!
+                            </Button> :
+                            <Link to="/author" style={{ textDecoration: 'none' }}>
+                                <Button size="small" color={context.currentTheme.colorPrimary}>
+                                    About the Author
+                                </Button>
+                            </Link>
+                    }
                 </CardActions>
             </Card>
         )}

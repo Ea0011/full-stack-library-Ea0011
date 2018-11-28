@@ -7,7 +7,7 @@ class AuthenticateUser
 
     def call
         current_author = author
-        token = JsonWebToken.encode({ author_id: current_author&.id })
+        token = JsonWebToken.encode({ author_id: current_author&.id, fname: current_author.fname, lname: current_author.lname })
         current_author.update(authentication_token: token)
         {
             author: current_author

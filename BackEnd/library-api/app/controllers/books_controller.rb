@@ -15,26 +15,29 @@ class BooksController < ApplicationController
         book = current_author&.books&.create!(book_params)
         if book
             json_response(book, :created)
-        end
+        else
             raise(ExceptionHandler::AuthenticationError, "Not Authorized")
+        end
     end
 
     def update
-        book = current_author&.books&.find(params[:id])
+        book = current_author&.books&.where(id: params[:id]).first
         if book
             book.update(book_params)
             json_response(book)
-        end
+        else
             raise(ExceptionHandler::AuthenticationError, "Not Authorized")
+        end
     end
 
     def destroy
-        book = current_author&.books&.find(paramsp[:id])
+        book = current_author&.books&.find(params[:id])
         if book
             book.destroy
             head(:no_content)
-        end
+        else
             raise(ExceptionHandler::AuthenticationError, "Not Authorized")
+        end
     end
 
     private
