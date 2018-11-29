@@ -2,24 +2,27 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid'
 import { DataContext } from '../context/Data';
 import Book from './Book';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 class BookList extends React.PureComponent {
-    async componentDidMount() {
-        if (!this.props.context.books.length) {
-            const booksResponse = await fetch("http://localhost:3000/books");
-            const books = await booksResponse.json();
-
-            books.forEach(book => {
-                this.props.context.addBook(book)
-            });
+    state = {
+        fetching: true
     }
-}
+
+    async componentDidMount() {
+        const booksResponse = await fetch("http://localhost:3000/books");
+        const books = await booksResponse.json();
+
+        this.props.context.setBooks(books);
+        this.setState({ fetching: false });
+    }
 
     render() {
         return (
             <DataContext.Consumer>
                 {context => (
-                    <Grid container spacing={16} style={{padding: 8}}>
+                    this.state.fetching ? <LinearProgress color={context.currentTheme.colorSecondary} /> :
+                    <Grid container spacing={16} style={{padding: 8, marginTop: 4}}>
                         {context.books.length ? 
                             context.books.map(book => (
                                 <Grid item xs={12} sm={6} lg={4} xl={2} key={book.id}>

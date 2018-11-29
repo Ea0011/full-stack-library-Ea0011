@@ -2,10 +2,12 @@ import React from 'react'
 
 export const theme = {
     primary: {
-        colorPrimary: "primary"
+        colorPrimary: "primary",
+        colorSecondary: "secondary"
     },
     secondary: {
-        colorSecondary: "secondary"
+        colorPrimary: "secondary",
+        colorSecondary: "primary"
     }
 }
 

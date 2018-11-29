@@ -2,23 +2,36 @@ import React from 'react';
 import Book from './Book';
 import Grid from '@material-ui/core/Grid';
 import { DataContext } from '../context/Data';
+import { Redirect } from 'react-router-dom';
+import withRouter from 'react-router-dom/withRouter';
+import { LinearProgress } from '@material-ui/core';
 
 class AuthorBooks extends React.PureComponent {
+    state = {
+        redirect: false,
+        fetching: true
+    }
+
     async componentDidMount() {
-        if (!this.props.context.currentAuthorBooks.length) {
-            const headers = new Headers();
-            headers.append("Authorization", window.localStorage.getItem("Authorization")); 
-            const data = {
-                headers,
-                method: 'GET'
-            }
+        const headers = new Headers();
+        headers.append("Authorization", window.localStorage.getItem("Authorization")); 
+        const data = {
+            headers,
+            method: 'GET'
+        }
+        try {
             const myBooksResponse = await fetch("http://localhost:3000/mybooks", data);
-            console.log(myBooksResponse);
             const myBooks = await myBooksResponse.json();
-            console.log(myBooks);
-            myBooks.forEach(book => {
-                this.props.context.addCurrentBook(book);
-            });
+            if (myBooks.message === "Unathorized") {
+                this.props.context.removeCurrentAuthor();
+                this.props.history.push('/login');
+            } else {
+                this.props.context.setCurrentAuthorBooks(myBooks);
+                this.setState({ fetching: false });
+            }
+        } catch(e) {
+            alert("Something went wrong");
+            this.setState({ fetching: false });
         }
     }
 
@@ -43,7 +56,9 @@ class AuthorBooks extends React.PureComponent {
         return(
             <DataContext.Consumer>
                 {context => (
-                    <Grid container spacing={16} style={{padding: 8}}>
+                    this.state.redirect ? <Redirect to='/login'/> :
+                    this.state.fetching ? <LinearProgress color={this.props.context.currentTheme.colorSecondary}/> :
+                    <Grid container spacing={16} style={{padding: 8, marginTop: 4}}>
                         {context.currentAuthorBooks.length ? 
                             context.currentAuthorBooks.map(book => (
                                 <Grid item xs={12} sm={6} lg={4} xl={2} key={book.id}>
@@ -59,12 +74,12 @@ class AuthorBooks extends React.PureComponent {
     }
 }
 
-const contextToProps = () => (
+const contextToProps = (props) => (
     <DataContext.Consumer>
         {context => (
-            <AuthorBooks context={context} />
+            <AuthorBooks context={context} history={props.history} />
         )}
     </DataContext.Consumer>
 )
 
-export default contextToProps;
+export default withRouter(contextToProps);

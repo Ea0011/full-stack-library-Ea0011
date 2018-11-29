@@ -39,6 +39,20 @@ class CurentAuthor extends React.PureComponent {
         window.localStorage.setItem("lname", json.lname);
     }
 
+    handleDelete = async() => {
+        const headers = new Headers();
+        headers.append("Authorization", window.localStorage.getItem("Authorization"));
+        const data = {
+            method: 'DELETE',
+            headers,
+        };
+        try {
+            await fetch("http://localhost:3000/authors", data);
+        } catch(e) {
+            alert("An error ocured. Please try again");
+        }
+    }
+
     render() {
         return(
             <React.Fragment>
@@ -49,6 +63,7 @@ class CurentAuthor extends React.PureComponent {
                         onChange={this.handleFnameChange}
                         label="First Name"
                         margin="normal"
+                        variant="outlined"
                     />
                     <TextField
                         id="lname"
@@ -56,9 +71,13 @@ class CurentAuthor extends React.PureComponent {
                         onChange={this.handleLnameCange}
                         label="Last Name"
                         margin="normal"
+                        variant="outlined"
                     />
                     <Button onClick={this.handleSubmit} color={this.props.context.currentTheme.colorPrimary}>
                         Update Info!
+                    </Button>
+                    <Button onClick={this.handleDelete} color={this.props.context.currentTheme.colorPrimary}>
+                        Delete Me!
                     </Button>
                 </Grid>
             </React.Fragment>

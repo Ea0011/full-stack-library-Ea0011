@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 
 class Authorization extends React.PureComponent {
     state = {
-        redirect: window.localStorage.getItem("Authorization") !== "undefined",
+        redirect: window.localStorage.getItem("Authorization"),
         email: "",
         password: ""
     }
@@ -27,14 +27,20 @@ class Authorization extends React.PureComponent {
             method: 'POST',
             body: form
         };
-        const response = await fetch("http://localhost:3000/auth/login", data);
-        const json = await response.json();
-        console.log(json);
-        this.props.context.setCurrentAuthor({fname: json.author.fname, lname: json.author.lname})
-        window.localStorage.setItem("Authorization", json.author.authentication_token);
-        window.localStorage.setItem("fname", json.author.fname);
-        window.localStorage.setItem("lname", json.author.lname);
-        this.setState({redirect: true});
+        try {
+            const response = await fetch("http://localhost:3000/auth/login", data);
+            if (!response.ok) {
+                window.location.reload();
+            }
+            const json = await response.json();
+            this.props.context.setCurrentAuthor({fname: json.author.fname, lname: json.author.lname})
+            window.localStorage.setItem("Authorization", json.author.authentication_token);
+            window.localStorage.setItem("fname", json.author.fname);
+            window.localStorage.setItem("lname", json.author.lname);
+            this.setState({redirect: true});
+        } catch(e) {
+            console.error(e);
+        }
     }
 
     handleSubmit = (e) => {
@@ -63,6 +69,7 @@ class Authorization extends React.PureComponent {
                         value={this.state.password}
                         onChange={this.handlePassChange}
                         margin="normal"
+                        type="password"
                     />
                     <Button onClick={this.handleSubmit} color={this.props.context.currentTheme.colorPrimary}>
                         log in!

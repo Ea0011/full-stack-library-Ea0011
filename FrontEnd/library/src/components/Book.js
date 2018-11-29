@@ -4,8 +4,8 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import { DataContext } from '../context/Data'
 import { Link } from 'react-router-dom'
-import { DataContext } from '../context/Data';
 
 const Book = ({ book, loggedIn, handleDelete }) => (
     <DataContext.Consumer>
@@ -28,16 +28,20 @@ const Book = ({ book, loggedIn, handleDelete }) => (
                 <CardActions>
                     {
                         loggedIn ? 
-                            <Button size="small"
-                                color={context.currentTheme.colorSecondary}
-                                onClick={() => {handleDelete(book.id)}}>
-                                Delete!
-                            </Button> :
-                            <Link to="/author" style={{ textDecoration: 'none' }}>
+                        <React.Fragment>
+                            <Button
+                                    size="small"
+                                    color={context.currentTheme.colorPrimary}
+                                    onClick={() => {handleDelete(book.id)}}
+                                >
+                                Delete!    
+                            </Button>
+                            <Link to={`/updatebook/${book.id}`} style={{textDecoration: 'none'}}>
                                 <Button size="small" color={context.currentTheme.colorPrimary}>
-                                    About the Author
+                                    Update Book
                                 </Button>
                             </Link>
+                        </React.Fragment> : null
                     }
                 </CardActions>
             </Card>

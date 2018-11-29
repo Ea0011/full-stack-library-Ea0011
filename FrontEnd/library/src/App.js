@@ -3,40 +3,53 @@ import { Route } from 'react-router-dom'
 import BookList from './components/BookList'
 import AuthorList from './components/AuthorList'
 import { DataContext, theme } from './context/Data'
-import Switch from 'react-router-dom/Switch';
+import Switch from 'react-router-dom/Switch'
 import { PrivateRoute } from './Routing/PrivateRoute'
 import CurentAuthor from './components/CurentAuthor'
 import Authorization from './components/Authorization'
 import AuthorBooks from './components/AuthorBooks'
 import NavBar from './components/NavBar'
+import CreateAuthor from './components/CreateAuthor'
+import AddBook from './components/AddBook'
+import EditBook from './components/EditBook'
 
 class App extends Component {
-  state = {
-      currentAuthor: { 
-        fname: window.localStorage.getItem("fname"),
-        lname: window.localStorage.getItem("lname")
-      },
+  constructor() {
+    super();
+    const currentAuthor = window.localStorage.getItem("Authorization") ? {
+      fname: window.localStorage.getItem("fname"),
+      lname: window.localStorage.getItem("lname")
+    } : null;
+    this.state = {
+      currentAuthor,
       books: [],
       authors: [],
       currentTheme: theme.primary,
       currentAuthorBooks: []
+    }
   }
 
   render() {
     return (
       <React.Fragment>
-        <NavBar loggedIn={this.state.currentAuthor && window.localStorage.getItem("Authorization") !== "undefined"}/>
         <DataContext.Provider value={
           {...this.state, 
             addBook: (book) => {
               this.setState(state => ({ books: [...state.books, book] }))
             },
+            setBooks: (books) => { this.setState({ books: books }) },
+            setAuthors: (authors) => { this.setState({ authors: authors }) },
             addAuthor: (author) => {
               this.setState(state => ({ authors: [...state.authors, author] }))
             },
-            removeBook: (bookId) => {console.log(this)},
             setCurrentAuthor: (author) => {
-              console.log(author); this.setState({ currentAuthor: author })
+              this.setState({ currentAuthor: author })
+            },
+            removeCurrentAuthor: () => {
+              window.localStorage.removeItem("Authorization");
+              window.localStorage.removeItem("fname");
+              window.localStorage.removeItem("lname");
+              this.setState({ currentAuthor: null });
             },
             removeAuthor: (authorId) => {console.log(this)},
             addCurrentBook: (book) => {
@@ -44,6 +57,7 @@ class App extends Component {
                   { currentAuthorBooks: [...state.currentAuthorBooks, book] }
                 ))
             },
+            setCurrentAuthorBooks: (books) => { this.setState({ currentAuthorBooks: books }) },
             removeAuthorBook: (bookId) => {
               this.setState(state => {
                   const newBooks = [];
@@ -51,17 +65,21 @@ class App extends Component {
                   return {...state, currentAuthorBooks: newBooks}
                 }
               )
-            }
+            },
           }
         }>
+          <NavBar 
+            loggedIn={this.state.currentAuthor && window.localStorage.getItem("Authorization")}
+            author={this.state.currentAuthor}
+          />
           <Switch>
               <Route exact path='/' component={BookList} />
               <Route path='/authors' component={AuthorList} />
-              <PrivateRoute path='/mybooks' component={AuthorBooks} /> */}
+              <PrivateRoute path='/mybooks' component={AuthorBooks} />
               <PrivateRoute path='/mypage' component={CurentAuthor} />
-              {/* <PrivateRoute path='/mybook' component={CurentBook} /> */}
-              {/* <Route path='authors/:id' component={DetailedAuthor} /> */}
-              {/* <Route path='signup' component={SignUp} /> */}
+              <PrivateRoute path='/addbook' component={AddBook} />
+              <PrivateRoute path='/updatebook/:id' component={EditBook} />
+              <Route path='/signup' component={CreateAuthor} />
               <Route path='/login' component={Authorization} />
           </Switch>
         </DataContext.Provider>
