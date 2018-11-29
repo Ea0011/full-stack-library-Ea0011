@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   put 'authors/', to: 'authors#update'
   delete 'authors/', to: 'authors#destroy'
   get 'mybooks', to: 'authors#current_books'
+  get 'books/search/:text', to: 'books#search'
 end

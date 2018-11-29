@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
     before_action :set_book, only: [:show, :destroy, :update]
-    skip_before_action :authenticate, only: [:show, :index]
+    skip_before_action :authenticate, only: [:show, :index, :search]
 
     def index
         @books = Book.all
@@ -38,6 +38,11 @@ class BooksController < ApplicationController
         else
             raise(ExceptionHandler::AuthenticationError, "Not Authorized")
         end
+    end
+
+    def search
+        books = Book.search(params[:text])
+        json_response(books)
     end
 
     private
