@@ -26,8 +26,7 @@ class BookList extends React.PureComponent {
         if (query.length) {
             const searchResponse = await fetch(`http://localhost:3000/books/search/${query}`);
             const searchedBooks = await searchResponse.json();
-
-            console.log(searchedBooks);
+            
             this.props.context.setBooks(searchedBooks);
             this.setState({ fetching: false });
         } else {

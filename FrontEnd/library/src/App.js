@@ -29,6 +29,14 @@ class App extends Component {
     }
   }
 
+  changeTheme = () => {
+    if (this.state.currentTheme.colorPrimary === "primary") {
+      this.setState({ currentTheme: theme.secondary });
+    } else {
+      this.setState({ currentTheme: theme.primary });
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -51,7 +59,6 @@ class App extends Component {
               window.localStorage.removeItem("lname");
               this.setState({ currentAuthor: null });
             },
-            removeAuthor: (authorId) => {console.log(this)},
             addCurrentBook: (book) => {
               this.setState(state => (
                   { currentAuthorBooks: [...state.currentAuthorBooks, book] }
@@ -71,6 +78,7 @@ class App extends Component {
           <NavBar 
             loggedIn={this.state.currentAuthor && window.localStorage.getItem("Authorization")}
             author={this.state.currentAuthor}
+            changeTheme={this.changeTheme}
           />
           <Switch>
               <Route exact path='/' component={BookList} />

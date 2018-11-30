@@ -22,6 +22,9 @@ const Book = ({ book, loggedIn, handleDelete }) => (
                         <strong>Genre: </strong>{book.genre}
                     </Typography>
                     <Typography component="p" style={{marginTop: 25}}>
+                       <strong>Written By: </strong>{`${book.author.fname} ${book.author.lname}`}
+                    </Typography>
+                    <Typography component="p" style={{marginTop: 25}}>
                         {book.description}
                     </Typography>
                 </CardContent>
